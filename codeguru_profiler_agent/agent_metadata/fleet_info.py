@@ -17,7 +17,7 @@ def http_get(url, headers={}):
     # With this check we can tell bandit (static analysis tool) to ignore this error with #nosec
     # https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b310-urllib-urlopen
 
-    logger.debug("Making a request to {} with {} as headers.".format(url, headers))
+    logger.debug("Making a request to {} with headers set for these keys: {}".format(url, headers.keys()))
     if not url.startswith("http"):
         raise ValueError("url for metadata is not a valid http address. We will not try to get metadata")
     req = Request(url)
