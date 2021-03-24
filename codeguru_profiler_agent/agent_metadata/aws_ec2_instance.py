@@ -15,8 +15,8 @@ EC2_HOST_INSTANCE_TYPE_URI = DEFAULT_EC2_METADATA_URI + "instance-type"
 # thought it doesn't contain any secret; ignoring with # nosec
 # https://bandit.readthedocs.io/en/latest/plugins/b105_hardcoded_password_string.html
 EC2_API_TOKEN_URI = "http://169.254.169.254/latest/api/token"  # nosec
-EC2_METADATA_TOKEN_HEADER_KEY = 'X-aws-ec2-metadata-token'
-EC2_METADATA_TOKEN_TTL_HEADER_KEY = 'X-aws-ec2-metadata-token-ttl-seconds'
+EC2_METADATA_TOKEN_HEADER_KEY = 'X-aws-ec2-metadata-token'  # nosec
+EC2_METADATA_TOKEN_TTL_HEADER_KEY = 'X-aws-ec2-metadata-token-ttl-seconds'  # nosec
 EC2_METADATA_TOKEN_TTL_HEADER_VALUE = '21600'
 
 logger = logging.getLogger(__name__)
