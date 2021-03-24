@@ -17,7 +17,7 @@ EC2_HOST_INSTANCE_TYPE_URI = DEFAULT_EC2_METADATA_URI + "instance-type"
 EC2_API_TOKEN_URI = "http://169.254.169.254/latest/api/token"  # nosec
 EC2_METADATA_TOKEN_HEADER_KEY = 'X-aws-ec2-metadata-token'  # nosec
 EC2_METADATA_TOKEN_TTL_HEADER_KEY = 'X-aws-ec2-metadata-token-ttl-seconds'  # nosec
-EC2_METADATA_TOKEN_TTL_HEADER_VALUE = '21600'
+EC2_METADATA_TOKEN_TTL_HEADER_VALUE = '21600'  # nosec
 
 logger = logging.getLogger(__name__)
 
