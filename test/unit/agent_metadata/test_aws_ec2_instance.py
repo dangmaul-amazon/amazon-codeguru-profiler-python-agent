@@ -2,7 +2,7 @@ import pytest
 import httpretty
 import sys
 from codeguru_profiler_agent.agent_metadata.aws_ec2_instance import EC2_HOST_NAME_URI, \
-    EC2_HOST_INSTANCE_TYPE_URI, DEFAULT_EC2_API_TOKEN_URI
+    EC2_HOST_INSTANCE_TYPE_URI, EC2_API_TOKEN_URI
 from codeguru_profiler_agent.agent_metadata.aws_ec2_instance import AWSEC2Instance
 
 
@@ -43,7 +43,7 @@ class TestAWSEC2Instance:
                     body="testHostType")
                 httpretty.register_uri(
                     httpretty.GET,
-                    DEFAULT_EC2_API_TOKEN_URI,
+                    EC2_API_TOKEN_URI,
                     body="PARIOq_FXbIyL0maE9RcmrsyWtylvFh1ZDt0NrRUyNxeV1-DlpFpA==")
                 yield
                 httpretty.disable()

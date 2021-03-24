@@ -14,7 +14,10 @@ EC2_HOST_INSTANCE_TYPE_URI = DEFAULT_EC2_METADATA_URI + "instance-type"
 # Bandit marks the following line as risky because it contains the word "token",
 # thought it doesn't contain any secret; ignoring with # nosec
 # https://bandit.readthedocs.io/en/latest/plugins/b105_hardcoded_password_string.html
-DEFAULT_EC2_API_TOKEN_URI = "http://169.254.169.254/latest/api/token"  # nosec
+EC2_API_TOKEN_URI = "http://169.254.169.254/latest/api/token"  # nosec
+EC2_METADATA_TOKEN_HEADER_KEY = 'X-aws-ec2-metadata-token'
+EC2_METADATA_TOKEN_TTL_HEADER_KEY = 'X-aws-ec2-metadata-token-ttl-seconds'
+EC2_METADATA_TOKEN_TTL_HEADER_VALUE = '21600'
 
 logger = logging.getLogger(__name__)
 
@@ -38,17 +41,26 @@ class AWSEC2Instance(FleetInfo):
         """
         The id of the fleet element. Eg. host name in ec2.
         """
-        return http_get(url=EC2_HOST_NAME_URI,
-                        headers={'X-aws-ec2-metadata-token': cls.__look_up_ec2_api_token()}).read().decode()
-
-    @classmethod
-    def __look_up_ec2_api_token(cls):
-        return http_get(url=DEFAULT_EC2_API_TOKEN_URI,
-                        headers={'X-aws-ec2-metadata-token-ttl-seconds': '21600'}).read().decode()
+        return cls.__look_up_with_IMDSv2(EC2_HOST_NAME_URI)
 
     @classmethod
     def __look_up_instance_type(cls):
-        return http_get(url=EC2_HOST_INSTANCE_TYPE_URI).read().decode()
+        """
+        The type of the instance. Eg. m5.2xlarge
+        """
+        return cls.__look_up_with_IMDSv2(EC2_HOST_INSTANCE_TYPE_URI)
+
+    @classmethod
+    def __look_up_with_IMDSv2(cls, url):
+        return http_get(url=url,
+                        headers={EC2_METADATA_TOKEN_HEADER_KEY: cls.__look_up_ec2_api_token()}) \
+            .read().decode()
+
+    @classmethod
+    def __look_up_ec2_api_token(cls):
+        return http_get(url=EC2_API_TOKEN_URI,
+                        headers={EC2_METADATA_TOKEN_TTL_HEADER_KEY: EC2_METADATA_TOKEN_TTL_HEADER_VALUE}) \
+            .read().decode()
 
     @classmethod
     def look_up_metadata(cls):
